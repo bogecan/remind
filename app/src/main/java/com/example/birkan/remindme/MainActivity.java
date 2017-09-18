@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -34,11 +35,21 @@ public class MainActivity extends AppCompatActivity {
         ListView listView = (ListView) findViewById(R.id.lstView);
         ArrayList<String> remindItems = new ArrayList<String>();
 
-        for (RemindItem item: db.GetReminderList()) {
+        final List<RemindItem> remindItemList = db.GetReminderList();
+        for (RemindItem item: remindItemList) {
             remindItems.add(item.getTitle());
         }
         ArrayAdapter<String> remindItemArrayAdapter = new ArrayAdapter<String>(getApplicationContext(),R.layout.item,R.id.itemid,remindItems);
         listView.setAdapter(remindItemArrayAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent1 = new Intent(context, Main3Activity.class);
+                intent1.putExtra("remindItem", remindItemList.get(i).getId());
+                startActivity(intent1);
+            }
+        });
+
 
     }
 
