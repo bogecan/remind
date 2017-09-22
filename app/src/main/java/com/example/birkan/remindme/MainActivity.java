@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 if (intent.getAction().equals(Config.REGISTRATION_COMPLETE)) {
                     // gcm successfully registered
                     // now subscribe to `global` topic to receive app wide notifications
-                    FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);
+                    FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);//her cihaz topic'e bu kodla kaydoluyor. daha sonra push notificatıonları bu targetlere(deviceId) api tarafında yazarak gönderıyoruz.
 
 
 
