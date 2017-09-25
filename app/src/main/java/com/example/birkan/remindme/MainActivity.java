@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -82,9 +83,17 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);//oluşturulan ıntent işlemi çağırıldı.
             }
         });
+        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresher);
         final ListView listView = (ListView) findViewById(R.id.lstView);//listview itemi bulundu
         final ArrayList<String> remindItems = new ArrayList<String>();
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {//swipe refresher aşağı kaydırınca yenılıyor
+            @Override
+            public void onRefresh() {
+                getListDataAsync(listView);
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -101,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                     // new push notification is received
 
                     String message = intent.getStringExtra("message");
-
+                    getListDataAsync(listView);
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
 
 
@@ -112,10 +121,13 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
         String regId = pref.getString("regId", null);
 
+        getListDataAsync(listView);
 
 
+    }
 
-// Instantiate the RequestQueue.
+    private void getListDataAsync(final ListView listView) {
+        // Instantiate the RequestQueue.
         com.android.volley.RequestQueue queue = Volley.newRequestQueue(this); //yeni volley kuyruğu oluşturuldu
         String url ="http://www.guvencden.com/api/Reminds";//call yapacağımız url
 
@@ -152,12 +164,7 @@ public class MainActivity extends AppCompatActivity {
                 10000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-MySingleton.getInstance(this).addToRequestQueue(stringRequest);//onceden olusturulan farklı bı kuyruk sınıfına gonderıyoruz. bunu yazmazsak apı call olmuyor.
-
-
-
-
-
+        MySingleton.getInstance(this).addToRequestQueue(stringRequest);//onceden olusturulan farklı bı kuyruk sınıfına gonderıyoruz. bunu yazmazsak apı call olmuyor.
     }
 
     private void setList(ListView listView, List<RemindItem> remindItems) {
@@ -197,6 +204,9 @@ final List<RemindItem> remindItemList = remindItems;
 
         // clear the notification area when the app is opened
         NotificationUtils.clearNotifications(getApplicationContext());
+        final ListView listView = (ListView) findViewById(R.id.lstView);//listview itemi bulundu
+        getListDataAsync(listView);
+
     }
 
     @Override

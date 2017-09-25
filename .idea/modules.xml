@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/RemindMe.iml" filepath="$PROJECT_DIR$/RemindMe.iml" />
       <module fileurl="file://$PROJECT_DIR$/android-remindme-master.iml" filepath="$PROJECT_DIR$/android-remindme-master.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/remind.iml" filepath="$PROJECT_DIR$/remind.iml" />
     </modules>
   </component>
 </project>
